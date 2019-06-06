@@ -9,11 +9,9 @@ export class UserController {
     }
 
     @Post('/login')
-    login(@Res() response: Response,  @Body() user: UserDto ) {
+    login(@Res() response: Response, @Body() user: UserDto) {
         console.log('login');
         this.user.login(user).then(rsp => {
-            console.log('------');
-            console.log(rsp);
             if (rsp) {
                 response.status(HttpStatus.OK).json({aa: '登录成功！'});
             }

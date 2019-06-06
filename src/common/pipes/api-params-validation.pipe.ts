@@ -6,9 +6,7 @@ import { validate } from 'class-validator';
 @Injectable()
 export class ApiParamsValidationPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
-
     const { metatype } = metadata;
-
     // 如果参数不是 类 而是普通的 JavaScript 对象则不进行验证
     if (!metatype || !this.toValidate(metatype)) {
       return value;
@@ -25,11 +23,10 @@ export class ApiParamsValidationPipe implements PipeTransform {
       const contexts = error.contexts;
       // 将未通过验证的字段的错误信息和状态码，以ApiException的形式抛给我们的全局异常过滤器
       for (const key in constraints) {
-          if (key) {
-            throw new ApiException(constraints[key], contexts[key].rtnCode, HttpStatus.BAD_REQUEST);
-          }
+        if (key) {
+          throw new ApiException(constraints[key], contexts[key].rtnCode, HttpStatus.BAD_REQUEST);
+        }
       }
-
     }
 
     return value;
