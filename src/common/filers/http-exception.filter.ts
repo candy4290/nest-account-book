@@ -8,13 +8,6 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
       const response: Response = ctx.getResponse();
       const request: Request = ctx.getRequest();
       const status = exception.getStatus();
-      // console.log(request.headers.origin);
-      // response.setHeader('Access-Control-Allow-Origin', request.headers.origin);
-      if (request.method === 'OPTIONS') {
-        response.status(200).end();
-      } else {
-        response.status(status);
-      }
       if (exception instanceof ApiException) {
         response.status(status).json({
           rtnCode: exception.getRtnCode(),

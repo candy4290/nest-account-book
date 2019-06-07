@@ -12,8 +12,8 @@ export class UserService implements IUserService {
 
   }
   async login(user: User): Promise<boolean> {
-    return await this.userRepository.query(`select * from user where name='${user.userName}' and psw='${user.userPsw}'`).then(rsp => {
-      if (rsp) {
+    return await this.userRepository.query(`select * from user where username='${user.userName}' and psw='${user.userPsw}'`).then(rsp => {
+      if (rsp && rsp.length > 0) {
         return true;
       } else {
         return false;
