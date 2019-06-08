@@ -1,8 +1,9 @@
-import { Controller, Post, Res, HttpStatus, Body } from '@nestjs/common';
+import { Controller, Post, Res, HttpStatus, Body, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserDto } from './dots/user-login.dto';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -10,6 +11,7 @@ export class UserController {
     }
 
     @Post('/login')
+    // @UseGuards(AuthGuard())
     login(@Res() response: Response, @Body() user: UserDto) {
         this.user.login(user).then(rsp => {
             if (rsp) {
