@@ -5,8 +5,8 @@ import { ApiException } from '../exceptions/api.exception';
 export class HttpExceptionFilter<T> implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
       const ctx = host.switchToHttp();
-      const response: Response = ctx.getResponse();
-      const request: Request = ctx.getRequest();
+      const response = ctx.getResponse<Response>();
+      const request = ctx.getRequest<Request>();
       const status = exception.getStatus();
       if (exception instanceof ApiException) {
         response.status(status).json({

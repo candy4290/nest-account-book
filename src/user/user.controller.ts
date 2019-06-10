@@ -1,7 +1,7 @@
 import { Controller, Post, Res, HttpStatus, Body, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
-import { UserDto } from './dots/user-login.dto';
+import { UserDto } from './dtos/user-login.dto';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
 import { AuthGuard } from '@nestjs/passport';
 
