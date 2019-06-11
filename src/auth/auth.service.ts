@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
@@ -8,16 +8,16 @@ export class AuthService {
 
   async createToken(payload: JwtPayload) {
     const accessToken = this.jwtService.sign(payload);
-    return {
-      expiresIn: 3600,
-      accessToken,
-    };
+    Logger.log('创造token');
+    Logger.log(accessToken);
+    return accessToken;
   }
 
   async validateUser(payload: JwtPayload): Promise<any> {
+    Logger.log('用户身份认证！');
     // put some validation logic here
     // for example query user by id/email/username
     // return {};
-    return false;
+    return true;
   }
 }

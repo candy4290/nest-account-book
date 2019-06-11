@@ -4,11 +4,13 @@ import { IUserService } from './interfaces/user-service.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User as USER } from './user.entity';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UserService implements IUserService {
   constructor(@InjectRepository(USER)
-    private readonly userRepository: Repository<USER>) {
+    private readonly userRepository: Repository<USER>,
+    private readonly authService: AuthService) {
 
   }
   async login(user: User): Promise<boolean> {
