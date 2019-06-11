@@ -8,8 +8,9 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(logger);
+  app.setGlobalPrefix('account');
   app.enableCors();
+  app.use(logger);
   app.useGlobalGuards(new AuthGuard());
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalPipes(new ApiParamsValidationPipe());
