@@ -1,4 +1,4 @@
-import { Controller, Post, Res, HttpStatus, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Res, HttpStatus, Body, UseGuards, Logger } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserDto } from './dtos/user-login.dto';
@@ -13,6 +13,7 @@ export class UserController {
     @Post('/login')
     // @UseGuards(AuthGuard())
     login(@Res() response: Response, @Body() user: UserDto) {
+        Logger.log('controll处理程序...');
         this.user.login(user).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnMsg: '登录成功！'});

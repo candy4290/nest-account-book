@@ -1,4 +1,4 @@
-import { ArgumentMetadata, PipeTransform, Injectable, HttpStatus } from '@nestjs/common';
+import { ArgumentMetadata, PipeTransform, Injectable, HttpStatus, Logger } from '@nestjs/common';
 import { ApiException } from '../exceptions/api.exception';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
@@ -6,6 +6,7 @@ import { validate } from 'class-validator';
 @Injectable()
 export class ApiParamsValidationPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
+    Logger.log('入参校验的管道...');
     const { metatype } = metadata;
     // 如果参数不是 类 而是普通的 JavaScript 对象则不进行验证
     if (!metatype || !this.toValidate(metatype)) {
