@@ -9,7 +9,9 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('account');
-  app.enableCors();
+  app.enableCors({
+    exposedHeaders: 'access-token', // 相当于设置header头Access-Control-Expose-Headers，以便客户端可以取到response header中的access-token
+  });
   app.use(logger);
   app.useGlobalGuards(new AuthGuard());
   app.useGlobalInterceptors(new LoggingInterceptor());

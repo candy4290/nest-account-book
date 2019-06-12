@@ -10,7 +10,7 @@ import { AuthService } from '../auth/auth.service';
 export class UserService implements IUserService {
   constructor(@InjectRepository(USER)
     private readonly userRepository: Repository<USER>,
-    private readonly authService: AuthService) {
+              private readonly authService: AuthService) {
 
   }
   async login(user: User): Promise<boolean> {
@@ -20,6 +20,12 @@ export class UserService implements IUserService {
       } else {
         return false;
       }
+    });
+  }
+
+  async userList(): Promise<User[]> {
+    return await this.userRepository.query('select * from user').then(rsp => {
+      return rsp;
     });
   }
 }
