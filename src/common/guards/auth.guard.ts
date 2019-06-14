@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { decode, sign, verify } from 'jsonwebtoken';
 import { Request } from 'express';
+import { TokenUtils } from '../utils/tokenHelper';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -11,21 +11,12 @@ export class AuthGuard implements CanActivate {
     Logger.log('守卫...');
     const request: Request = context.switchToHttp().getRequest();
     const token = request.headers['access-token'] + '';
-    const verified = this.verifyToken(token);
-    if (!token || !verified) {
-      Logger.log('token认证失败');
-      return false;
+    if (TokenUtils.verifyToken(token)) {
+      Logger.log('token认证成功');
+      return true;
     }
-    Logger.log('token认证成功');
-    return true;
+    Logger.log('token认证失败');
+    return false;
   }
 
-  verifyToken(token: string) {
-    try {
-      verify(token, 'secretKey');
-    } catch (error) {
-      return false;
-    }
-    return true;
-  }
 }
