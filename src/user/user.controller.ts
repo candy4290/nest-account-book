@@ -31,7 +31,7 @@ export class UserController {
     @UseGuards(new AuthGuard())
     userList(@Res() response: Response) {
         this.user.userList().then(rsp => {
-            response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: '登录成功！'});
+            response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success！'});
         });
     }
 }

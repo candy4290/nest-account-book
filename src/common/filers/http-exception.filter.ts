@@ -17,7 +17,7 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
     } else {
       response.status(status).json({
         rtnCode: status,
-        rtnMsg: request.url,
+        rtnMsg: exception.message.message,
       });
     }
   }

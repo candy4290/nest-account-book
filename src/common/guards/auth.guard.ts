@@ -11,7 +11,19 @@ export class AuthGuard implements CanActivate {
     Logger.log('守卫...');
     const request: Request = context.switchToHttp().getRequest();
     const token = request.headers['access-token'] + '';
-    if (!token || !verify(token, 'secretKey')) {
+    const verified = this.verifyToken(token);
+    if (!token || !verified) {
+      Logger.log('token认证失败');
+      return false;
+    }
+    Logger.log('token认证成功');
+    return true;
+  }
+
+  verifyToken(token: string) {
+    try {
+      verify(token, 'secretKey');
+    } catch (error) {
       return false;
     }
     return true;
