@@ -3,13 +3,12 @@ import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserDto } from './dtos/user-login.dto';
 import { ApiErrorCode } from '../common/enums/api-error-code.enum';
-import { AuthService } from '../auth/auth.service';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { TokenUtils } from '../common/utils/tokenHelper';
 
 @Controller('user')
 export class UserController {
-    constructor(private user: UserService, private readonly auth: AuthService) {
+    constructor(private user: UserService) {
     }
 
     @Post('/login')
