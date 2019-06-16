@@ -15,9 +15,9 @@ export class UserController {
     @Post('/login')
     login(@Res() response: Response, @Body() user: UserDto) {
         Logger.log('controll处理程序...');
-        this.user.login(user).then(rsp => {
+        this.user.login(user).then((rsp: number) => {
             if (rsp) {
-                const token = TokenUtils.generateToken({id: 1, userName: user.userName});
+                const token = TokenUtils.generateToken({id: rsp, userName: user.userName});
                 if (token) {
                     response.setHeader('access-token', token); // 登录成功后设置header头access-token
                 }
@@ -40,5 +40,11 @@ export class UserController {
     @UseGuards(new AuthGuard())
     bill(@Req() requset: Request, @Res() response: Response, @Body() bill: BillDto) {
         const token = requset.headers['access-token'] + '';
+        const payload = TokenUtils.parseToken(token);
+        this.user.bill(Object.assign({userId: payload['id']}, bill)).then(rsp => {
+            if (rsp) {
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnMsg: 'success!'});
+            }
+        });
     }
 }

@@ -1,4 +1,3 @@
-import { User } from '../interfaces/user.interface';
 import { IsNotEmpty } from 'class-validator';
 import { ApiErrorCode } from '../../common/enums/api-error-code.enum';
 import { Bill } from '../interfaces/bill.interface';
