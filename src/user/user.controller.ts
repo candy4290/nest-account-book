@@ -3,13 +3,13 @@ import { UserService } from './user.service';
 import { Response, Request } from 'express';
 import { UserDto } from './dtos/user-login.dto';
 import { ApiErrorCode } from '../common/enums/api-error-code.enum';
-import { AuthService } from '../auth/auth.service';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { BillDto } from './dtos/bill.dto';
+import { TokenUtils } from '../common/utils/tokenHelper';
 
 @Controller('user')
 export class UserController {
-    constructor(private user: UserService, private readonly auth: AuthService) {
+    constructor(private user: UserService) {
     }
 
     @Post('/login')
@@ -17,13 +17,13 @@ export class UserController {
         Logger.log('controll处理程序...');
         this.user.login(user).then(rsp => {
             if (rsp) {
-                this.auth.createToken({id: 1, userName: user.userName}).then(token => {
+                const token = TokenUtils.generateToken({id: 1, userName: user.userName});
+                if (token) {
                     response.setHeader('access-token', token); // 登录成功后设置header头access-token
-                    response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnMsg: '登录成功！'});
-                });
+                }
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnMsg: '登录成功！'});
             } else {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.USER_NOT_VALID, rtnMsg: '用户名或密码错误！'});
-
             }
         });
     }
@@ -32,7 +32,7 @@ export class UserController {
     @UseGuards(new AuthGuard())
     userList(@Res() response: Response) {
         this.user.userList().then(rsp => {
-            response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: '登录成功！'});
+            response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success！'});
         });
     }
 
