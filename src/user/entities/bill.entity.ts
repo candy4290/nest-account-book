@@ -16,7 +16,7 @@ export class Bill {
     @Column('text')
     consumeType: string;
 
-    @Column('int')
+    @Column('float')
     money: number;
 
     @Column('text')
