@@ -1,10 +1,11 @@
-import { Controller, Post, Res, HttpStatus, Body, UseGuards, Logger } from '@nestjs/common';
+import { Controller, Post, Res, HttpStatus, Body, UseGuards, Logger, Req } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { UserDto } from './dtos/user-login.dto';
 import { ApiErrorCode } from '../common/enums/api-error-code.enum';
 import { AuthService } from '../auth/auth.service';
 import { AuthGuard } from '../common/guards/auth.guard';
+import { BillDto } from './dtos/bill.dto';
 
 @Controller('user')
 export class UserController {
@@ -33,5 +34,11 @@ export class UserController {
         this.user.userList().then(rsp => {
             response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: '登录成功！'});
         });
+    }
+
+    @Post('bill')
+    @UseGuards(new AuthGuard())
+    bill(@Req() requset: Request, @Res() response: Response, @Body() bill: BillDto) {
+        const token = requset.headers['access-token'] + '';
     }
 }

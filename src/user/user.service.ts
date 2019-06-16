@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User as USER } from './user.entity';
 import { AuthService } from '../auth/auth.service';
+import { Bill } from './interfaces/bill.interface';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -27,5 +28,9 @@ export class UserService implements IUserService {
     return await this.userRepository.query('select * from user').then(rsp => {
       return rsp;
     });
+  }
+
+  async bill(bill: Bill): Promise<boolean> {
+    return;
   }
 }
