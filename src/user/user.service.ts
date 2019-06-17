@@ -4,7 +4,7 @@ import { Bill } from './interfaces/bill.interface';
 import { IUserService } from './interfaces/user-service.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User as USER } from './user.entity';
+import { User as USER } from './entities/user.entity';
 import { Bill as BILL } from './entities/bill.entity';
 
 @Injectable()
