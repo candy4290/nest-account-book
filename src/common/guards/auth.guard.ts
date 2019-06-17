@@ -2,6 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/commo
 import { Observable } from 'rxjs';
 import { Request } from 'express';
 import { TokenUtils } from '../utils/tokenHelper';
+import { tokenConfig } from '../enums/token.enum';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -10,7 +11,7 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     Logger.log('守卫...');
     const request: Request = context.switchToHttp().getRequest();
-    const token = request.headers['access-token'] + '';
+    const token = request.headers[tokenConfig.TOKEN_NAME] + '';
     if (TokenUtils.verifyToken(token)) {
       Logger.log('token认证成功');
       return true;

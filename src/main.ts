@@ -9,12 +9,13 @@ import { logger } from './common/middleware/logger.middleware';
 import * as rateLimit from 'express-rate-limit';
 import * as compression from 'compression';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { tokenConfig } from './common/enums/token.enum';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('account');
   app.enableCors({
-    exposedHeaders: 'access-token', // 相当于设置header头Access-Control-Expose-Headers，以便客户端可以取到response header中的access-token
+    exposedHeaders: tokenConfig.TOKEN_NAME + '', // 相当于设置header头Access-Control-Expose-Headers，以便客户端可以取到response header中的access-token
   });
   app.use(logger);
   // app.use(helmet());

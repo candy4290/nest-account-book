@@ -6,6 +6,7 @@ import { ApiErrorCode } from '../common/enums/api-error-code.enum';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { BillDto } from './dtos/bill.dto';
 import { TokenUtils } from '../common/utils/tokenHelper';
+import { tokenConfig } from '../common/enums/token.enum';
 
 @Controller('user')
 export class UserController {
@@ -19,7 +20,7 @@ export class UserController {
             if (rsp) {
                 const token = TokenUtils.generateToken({id: rsp, userName: user.userName});
                 if (token) {
-                    response.setHeader('access-token', token); // 登录成功后设置header头access-token
+                    response.setHeader(tokenConfig.TOKEN_NAME, token); // 登录成功后设置header头access-token
                 }
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnMsg: '登录成功！'});
             } else {
@@ -39,7 +40,7 @@ export class UserController {
     @Post('bill')
     @UseGuards(new AuthGuard())
     bill(@Req() requset: Request, @Res() response: Response, @Body() bill: BillDto) {
-        const token = requset.headers['access-token'] + '';
+        const token = requset.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
         this.user.bill(Object.assign({userId: payload['id']}, bill)).then(rsp => {
             if (rsp) {

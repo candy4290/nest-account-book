@@ -5,6 +5,8 @@ import { Request, Response } from 'express';
 import { TokenUtils } from '../utils/tokenHelper';
 import { ApiException } from '../exceptions/api.exception';
 import { ApiErrorCode } from '../enums/api-error-code.enum';
+import { SYSTEMCONFIG } from '../enums/system.enum';
+import { tokenConfig } from '../enums/token.enum';
 /**
  * 拦截器----记录每次请求的开始和结束，并在结束时将请求带来的token，刷新token过期时间，并返回
  * TODO 刷新token过期时间&系统超时处理
@@ -23,13 +25,13 @@ export class LoggingInterceptor implements NestInterceptor {
       .handle()
       .pipe(
         tap(() => {
-          const token = request.headers['access-token'] + '';
+          const token = request.headers[tokenConfig.TOKEN_NAME] + '';
           const newToken = TokenUtils.refreshToken(token);
           if (newToken) {
-            response.setHeader('access-token', newToken);
+            response.setHeader(tokenConfig.TOKEN_NAME, newToken);
           }
           Logger.log(`After... ${Date.now() - now}ms`, request.url);
-          if ((Date.now() - now) / 1000 > 30) {
+          if ((Date.now() - now) / 1000 > SYSTEMCONFIG.SYSTEM_TIME_OUT) {
             throw new ApiException('系统繁忙，请稍后再试！', ApiErrorCode.SYSTEM_TIMEOUT, HttpStatus.INTERNAL_SERVER_ERROR);
           }
         }),
