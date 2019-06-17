@@ -1,8 +1,8 @@
 import { sign, verify, decode } from 'jsonwebtoken';
 import { tokenConfig } from '../enums/token.enum';
-import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
 import { ApiErrorCode } from '../enums/api-error-code.enum';
+import { ApiException } from '../exceptions/api.exception';
 
 export class TokenUtils {
     /**
@@ -49,18 +49,14 @@ export class TokenUtils {
      * @param {string} token
      * @memberof TokenUtils
      */
-    static verifyToken(token: string, response?: Response): boolean {
+    static verifyToken(token: string): boolean {
         if (!token || token === 'null' || token === 'undefined') {
-            if (response) {
-                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.USER_NOT_LOGIN, rtnMsg: '用户未登录！'});
-            }
-            return false;
+            throw new ApiException('用户未登录！', ApiErrorCode.USER_NOT_LOGIN, HttpStatus.OK);
         }
         try {
             verify(token, tokenConfig.TOKEN_SECRET);
         } catch (error) {
-            response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.TOKEN_INVALID, rtnMsg: '令牌无效！'});
-            return false;
+            throw new ApiException('令牌无效！', ApiErrorCode.TOKEN_INVALID, HttpStatus.OK);
         }
         return true;
     }

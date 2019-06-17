@@ -12,4 +12,6 @@ export enum ApiErrorCode {
 
     USER_NOT_LOGIN = '100004', // 用户未登录
     TOKEN_INVALID = '100005', // 令牌无效
+
+    SYSTEM_UNKNOW_ERROR = 'S00000', // 系统未知错误
 }
