@@ -1,5 +1,4 @@
 export enum ApiErrorCode {
-    TIMEOUT = -1, // 系统繁忙
     SUCCESS = '000000', // 成功
 
     USER_NAME_INVALID = '100001', // 用户名无效
@@ -14,4 +13,6 @@ export enum ApiErrorCode {
     TOKEN_INVALID = '100005', // 令牌无效
 
     SYSTEM_UNKNOW_ERROR = 'S00000', // 系统未知错误
+    SYSTEM_TIMEOUT = 'S00001', // 系统繁忙
+
 }
