@@ -13,6 +13,14 @@ export class UserController {
     constructor(private user: UserService) {
     }
 
+
+    /**
+     *
+     * 登录
+     * @param {Response} response
+     * @param {UserDto} user
+     * @memberof UserController
+     */
     @Post('/login')
     login(@Res() response: Response, @Body() user: UserDto) {
         Logger.log('controll处理程序...');
@@ -37,6 +45,15 @@ export class UserController {
         });
     }
 
+
+    /**
+     *
+     * 入账操作
+     * @param {Request} requset
+     * @param {Response} response
+     * @param {BillDto} bill
+     * @memberof UserController
+     */
     @Post('bill')
     @UseGuards(new AuthGuard())
     bill(@Req() requset: Request, @Res() response: Response, @Body() bill: BillDto) {
@@ -45,6 +62,27 @@ export class UserController {
         this.user.bill(Object.assign({userId: payload['id']}, bill)).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnMsg: 'success!'});
+            }
+        });
+    }
+
+
+    /**
+     *
+     * 查询当前操作用户的所有账单
+     * @param {Request} requset
+     * @param {Response} response
+     * @param {BillDto} bill
+     * @memberof UserController
+     */
+    @Post('billList')
+    @UseGuards(new AuthGuard())
+    billList(@Req() requset: Request, @Res() response: Response) {
+        const token = requset.headers[tokenConfig.TOKEN_NAME] + '';
+        const payload = TokenUtils.parseToken(token);
+        this.user.billList(payload['id']).then(rsp => {
+            if (rsp) {
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
             }
         });
     }

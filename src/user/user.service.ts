@@ -45,4 +45,10 @@ export class UserService implements IUserService {
       }
     });
   }
+
+  async billList(id: number): Promise<Bill[]> {
+    return await this.billRepository.query(`select * from bill where userId = ${id}`).then(rsp => {
+      return rsp;
+    });
+  }
 }
