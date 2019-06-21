@@ -13,7 +13,6 @@ export class UserController {
     constructor(private user: UserService) {
     }
 
-
     /**
      *
      * 登录
@@ -82,7 +81,7 @@ export class UserController {
         const payload = TokenUtils.parseToken(token);
         this.user.billList(payload['id']).then(rsp => {
             if (rsp) {
-                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp.reverse(), rtnMsg: 'success!'});
             }
         });
     }
