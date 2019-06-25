@@ -48,11 +48,8 @@ export class UserService implements IUserService {
   }
 
   async billList(id: number, month: string): Promise<Bill[]> {
-    Logger.log(month);
     month = month || DateUtils.getDate(0);
-    Logger.log(month);
-    Logger.log(`select * from bill where userId = ${id} and consumeDate like '${month.slice(0, 7)}%'`);
-    return await this.billRepository.query(`select * from bill where userId = ${id} and consumeDate like ${month.slice(0, 7)}`).then(rsp => {
+    return await this.billRepository.query(`select * from bill where userId = ${id} and consumeDate like '${month.slice(0, 7)}%'`).then(rsp => {
       return rsp;
     });
   }
