@@ -76,10 +76,10 @@ export class UserController {
      */
     @Post('billList')
     @UseGuards(new AuthGuard())
-    billList(@Req() requset: Request, @Res() response: Response) {
+    billList(@Req() requset: Request, @Res() response: Response, @Body() query: {month: string}) {
         const token = requset.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
-        this.user.billList(payload['id']).then(rsp => {
+        this.user.billList(payload['id'], query.month).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp.reverse(), rtnMsg: 'success!'});
             }

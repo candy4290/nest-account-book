@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User as USER } from './entities/user.entity';
 import { Bill as BILL } from './entities/bill.entity';
+import { DateUtils } from 'src/common/utils/date';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -46,8 +47,12 @@ export class UserService implements IUserService {
     });
   }
 
-  async billList(id: number): Promise<Bill[]> {
-    return await this.billRepository.query(`select * from bill where userId = ${id}`).then(rsp => {
+  async billList(id: number, month: string): Promise<Bill[]> {
+    Logger.log(month);
+    month = month || DateUtils.getDate(0);
+    Logger.log(month);
+    Logger.log(`select * from bill where userId = ${id} and consumeDate like '${month.slice(0, 7)}%'`);
+    return await this.billRepository.query(`select * from bill where userId = ${id} and consumeDate like ${month.slice(0, 7)}`).then(rsp => {
       return rsp;
     });
   }
