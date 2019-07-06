@@ -1,10 +1,9 @@
-import { Controller, Post, Res, HttpStatus, Body, UseGuards, Logger, Req } from '@nestjs/common';
+import { Controller, Post, Res, HttpStatus, Body, UseGuards, Logger } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { UserDto } from './dtos/user-login.dto';
 import { ApiErrorCode } from '../common/enums/api-error-code.enum';
 import { AuthGuard } from '../common/guards/auth.guard';
-import { BillDto } from './dtos/bill.dto';
 import { TokenUtils } from '../common/utils/tokenHelper';
 import { tokenConfig } from '../common/enums/token.enum';
 
@@ -44,45 +43,4 @@ export class UserController {
         });
     }
 
-
-    /**
-     *
-     * 入账操作
-     * @param {Request} requset
-     * @param {Response} response
-     * @param {BillDto} bill
-     * @memberof UserController
-     */
-    @Post('bill')
-    @UseGuards(new AuthGuard())
-    bill(@Req() requset: Request, @Res() response: Response, @Body() bill: BillDto) {
-        const token = requset.headers[tokenConfig.TOKEN_NAME] + '';
-        const payload = TokenUtils.parseToken(token);
-        this.user.bill(Object.assign({userId: payload['id']}, bill)).then(rsp => {
-            if (rsp) {
-                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnMsg: 'success!'});
-            }
-        });
-    }
-
-
-    /**
-     *
-     * 查询当前操作用户的所有账单
-     * @param {Request} requset
-     * @param {Response} response
-     * @param {BillDto} bill
-     * @memberof UserController
-     */
-    @Post('billList')
-    @UseGuards(new AuthGuard())
-    billList(@Req() requset: Request, @Res() response: Response, @Body() query: {month: string}) {
-        const token = requset.headers[tokenConfig.TOKEN_NAME] + '';
-        const payload = TokenUtils.parseToken(token);
-        this.user.billList(payload['id'], query.month).then(rsp => {
-            if (rsp) {
-                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp.reverse(), rtnMsg: 'success!'});
-            }
-        });
-    }
 }
