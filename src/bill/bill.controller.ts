@@ -42,13 +42,33 @@ export class BillController {
      */
     @Post('billList')
     @UseGuards(new AuthGuard())
-    billList(@Req() requset: Request, @Res() response: Response, @Body() query: {month: string}) {
-        const token = requset.headers[tokenConfig.TOKEN_NAME] + '';
+    billList(@Req() request: Request, @Res() response: Response, @Body() query: {month: string}) {
+        const token = request.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
-        Logger.log(payload);
         this.billService.billList(payload['id'], query.month).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp.reverse(), rtnMsg: 'success!'});
+            }
+        });
+    }
+
+
+    /**
+     * 查询当前月份消费的统计数据
+     *
+     * @param {Request} request
+     * @param {Response} response
+     * @param {{month: string}} query
+     * @memberof BillController
+     */
+    @Post('statisticsDataOfMonth')
+    @UseGuards(new AuthGuard())
+    statisticsDataOfMonth(@Req() request: Request, @Res() response: Response, @Body() query: {month: string}) {
+        const token = request.headers[tokenConfig.TOKEN_NAME] + '';
+        const payload = TokenUtils.parseToken(token);
+        this.billService.statisticsDataOfMonth(payload['id'], query.month).then(rsp => {
+            if (rsp) {
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
             }
         });
     }

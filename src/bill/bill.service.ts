@@ -28,4 +28,13 @@ export class BillService implements IBillService {
       return rsp;
     });
   }
+
+  async statisticsDataOfMonth(id: number, month: string): Promise<any[]> {
+    month = month || DateUtils.getDate(0);
+    return await this.billRepository
+    .query(`select consumeType, sum(money) as money from bill where userId = ${id} and consumeDate like '${month.slice(0, 7)}%' group by consumeType`)
+      .then(rsp => {
+      return rsp;
+    });
+  }
 }
