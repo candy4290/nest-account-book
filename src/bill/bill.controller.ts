@@ -54,22 +54,24 @@ export class BillController {
 
 
     /**
-     * 查询当前月份消费的统计数据
+     * 查询当前月份消费/收入的统计数据
      *
      * @param {Request} request
      * @param {Response} response
      * @param {{month: string}} query
+     * @param {{type: number}} query 1-支出 2-收入
      * @memberof BillController
      */
     @Post('statisticsDataOfMonth')
     @UseGuards(new AuthGuard())
-    statisticsDataOfMonth(@Req() request: Request, @Res() response: Response, @Body() query: {month: string}) {
+    statisticsDataOfMonth(@Req() request: Request, @Res() response: Response, @Body() query: {month: string, type: number}) {
         const token = request.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
-        this.billService.statisticsDataOfMonth(payload['id'], query.month).then(rsp => {
+        this.billService.statisticsDataOfMonth(payload['id'], query.month, query.type).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
             }
         });
     }
+
 }
