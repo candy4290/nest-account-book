@@ -64,10 +64,10 @@ export class BillController {
      */
     @Post('statisticsDataOfMonth')
     @UseGuards(new AuthGuard())
-    statisticsDataOfMonth(@Req() request: Request, @Res() response: Response, @Body() query: {month: string, type: number}) {
+    statisticsDataOfMonth(@Req() request: Request, @Res() response: Response, @Body() query: {month: string}) {
         const token = request.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
-        this.billService.statisticsDataOfMonth(payload['id'], query.month, query.type).then(rsp => {
+        this.billService.statisticsDataOfMonth(payload['id'], query.month).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
             }

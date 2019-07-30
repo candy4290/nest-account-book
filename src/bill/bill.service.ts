@@ -29,10 +29,10 @@ export class BillService implements IBillService {
     });
   }
 
-  async statisticsDataOfMonth(id: number, month: string, type: number): Promise<any[]> {
+  async statisticsDataOfMonth(id: number, month: string): Promise<any[]> {
     month = month || DateUtils.getDate(0);
     return await this.billRepository
-    .query(`select consumeType, round(sum(money),2) as money from bill where userId = ${id} and money ${type === 1 ? '<' : '>'} 0
+    .query(`select consumeType, round(sum(money),2) as money from bill where userId = ${id}
     and consumeDate like '${month.slice(0, 7)}%' group by consumeType`)
       .then(rsp => {
       return rsp;
