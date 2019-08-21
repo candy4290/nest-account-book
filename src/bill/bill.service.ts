@@ -22,9 +22,17 @@ export class BillService implements IBillService {
     });
   }
 
-  async billList(id: number, month: string): Promise<Bill[]> {
+  async billList(id: number, month: string, type?: string): Promise<Bill[]> {
     month = month || DateUtils.getDate(0);
-    return await this.billRepository.query(`select * from bill where userId = ${id} and consumeDate like '${month.slice(0, 7)}%'`).then(rsp => {
+    let query;
+    if (type) {
+      query = `select * from bill where userId = ${id} and consumeType = ${type}
+      and consumeDate like '${month.slice(0, 7)}%'`;
+    } else {
+      query = `select * from bill where userId = ${id}
+      and consumeDate like '${month.slice(0, 7)}%'`;
+    }
+    return await this.billRepository.query(query).then(rsp => {
       return rsp;
     });
   }

@@ -42,10 +42,10 @@ export class BillController {
      */
     @Post('billList')
     @UseGuards(new AuthGuard())
-    billList(@Req() request: Request, @Res() response: Response, @Body() query: {month: string}) {
+    billList(@Req() request: Request, @Res() response: Response, @Body() query: {month: string, type?: string}) {
         const token = request.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
-        this.billService.billList(payload['id'], query.month).then(rsp => {
+        this.billService.billList(payload['id'], query.month, query.type).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp.reverse(), rtnMsg: 'success!'});
             }
