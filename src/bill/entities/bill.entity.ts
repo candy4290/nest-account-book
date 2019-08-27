@@ -24,4 +24,7 @@ export class Bill {
 
     @Column('bigint')
     submitDate: number;
+
+    @Column('bigint')
+    lastUpdateDate: number;
 }

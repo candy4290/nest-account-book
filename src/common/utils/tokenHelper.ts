@@ -26,7 +26,7 @@ export class TokenUtils {
      * @memberof TokenUtils
      */
     static parseToken(token: string) {
-        return decode(token);
+        return decode(token) as {id: number, userName: string};
     }
 
     /**
@@ -40,7 +40,7 @@ export class TokenUtils {
             return null;
         }
         const payload = this.parseToken(token);
-        return this.generateToken({id: payload['id'], userName: payload['userName']});
+        return this.generateToken({id: payload.id, userName: payload.userName});
     }
 
     /**

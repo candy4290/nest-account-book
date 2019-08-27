@@ -25,7 +25,7 @@ export class BillController {
     bill(@Req() requset: Request, @Res() response: Response, @Body() bill: BillDto) {
         const token = requset.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
-        this.billService.bill(Object.assign({userId: payload['id']}, bill)).then(rsp => {
+        this.billService.bill(Object.assign({userId: payload.id}, bill)).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnMsg: 'success!'});
             }
@@ -55,13 +55,12 @@ export class BillController {
     billList(@Req() request: Request, @Res() response: Response, @Body() query: {month: string, type?: string}) {
         const token = request.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
-        this.billService.billList(payload['id'], query.month, query.type).then(rsp => {
+        this.billService.billList(payload.id, query.month, query.type).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp.reverse(), rtnMsg: 'success!'});
             }
         });
     }
-
 
     /**
      * 查询当前月份消费/收入的统计数据
@@ -77,7 +76,7 @@ export class BillController {
     statisticsDataOfMonth(@Req() request: Request, @Res() response: Response, @Body() query: {month: string}) {
         const token = request.headers[tokenConfig.TOKEN_NAME] + '';
         const payload = TokenUtils.parseToken(token);
-        this.billService.statisticsDataOfMonth(payload['id'], query.month).then(rsp => {
+        this.billService.statisticsDataOfMonth(payload.id, query.month).then(rsp => {
             if (rsp) {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
             }
