@@ -32,6 +32,16 @@ export class BillController {
         });
     }
 
+    @Post('detail')
+    @UseGuards(new AuthGuard())
+    billDetail(@Req() requset: Request, @Res() response: Response, @Body() query: {id: number}) {
+        this.billService.billDetail(query.id).then(rsp => {
+            if (rsp) {
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
+            }
+        });
+    }
+
     /**
      *
      * 查询当前操作用户的所有账单

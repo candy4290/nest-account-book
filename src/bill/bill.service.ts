@@ -12,14 +12,30 @@ export class BillService implements IBillService {
 
   }
 
-  async bill(bill: Bill): Promise<boolean> {
-    return await this.billRepository.insert(Object.assign(bill, {submitDate: new Date().getTime()})).then(rsp => {
-      if (rsp.raw.affectedRows > 0) {
-        return true;
-      } else {
-        return false;
-      }
+  async billDetail(id: number): Promise<Bill> {
+    return await this.billRepository.findOne(id).then(rsp => {
+      return rsp;
     });
+  }
+
+  async bill(bill: Bill): Promise<boolean> {
+    if (!bill.id) {
+      return await this.billRepository.insert(Object.assign(bill, {submitDate: new Date().getTime()})).then(rsp => {
+        if (rsp.raw.affectedRows > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    } else {
+      return await this.billRepository.update(bill.id, Object.assign(bill, {lastUpdateDate: new Date().getTime()})).then(rsp => {
+        if (rsp.raw.affectedRows > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
   }
 
   async billList(id: number, month: string, type?: string): Promise<Bill[]> {
