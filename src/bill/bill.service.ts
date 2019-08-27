@@ -20,7 +20,11 @@ export class BillService implements IBillService {
 
   async bill(bill: Bill): Promise<boolean> {
     if (!bill.id) {
-      return await this.billRepository.insert(Object.assign(bill, {submitDate: new Date().getTime()})).then(rsp => {
+      return await this.billRepository.insert(Object.assign(bill,
+        {
+          submitDate: new Date().getTime(),
+          lastUpdateDate: new Date().getTime(),
+        })).then(rsp => {
         if (rsp.raw.affectedRows > 0) {
           return true;
         } else {
