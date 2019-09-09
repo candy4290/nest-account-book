@@ -44,17 +44,27 @@ export class BillService implements IBillService {
 
   async billList(id: number, month: string, type?: string): Promise<Bill[]> {
     month = month || DateUtils.getDate(0);
-    let query;
+    const queryBuilder = this.billRepository.createQueryBuilder();
     if (type) {
-      query = `select * from bill where userId = ${id} and consumeType = ${type}
-      and consumeDate like '${month.slice(0, 7)}%'`;
+      return queryBuilder
+      .where(`userId = :id`, {id})
+      .andWhere('consumeType = :type', { type })
+      .andWhere(`consumeDate like :param`)
+      .setParameters({
+        param: `${month.slice(0, 7)}%`,
+      })
+      .orderBy('consumeDate')
+      .getMany();
     } else {
-      query = `select * from bill where userId = ${id}
-      and consumeDate like '${month.slice(0, 7)}%'`;
+      return queryBuilder
+      .where(`userId = :id`, {id})
+      .andWhere(`consumeDate like :param`)
+      .setParameters({
+        param: `${month.slice(0, 7)}%`,
+      })
+      .orderBy('consumeDate')
+      .getMany();
     }
-    return await this.billRepository.query(query).then(rsp => {
-      return rsp;
-    });
   }
 
   async statisticsDataOfMonth(id: number, month: string): Promise<any[]> {
