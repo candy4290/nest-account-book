@@ -5,7 +5,7 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('text')
+    @Column({type: 'text', name: 'username', comment: '用户名'})
     username: string;
 
     @Column('text')

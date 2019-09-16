@@ -19,7 +19,7 @@ export class Bill {
     @Column('float')
     money: number;
 
-    @Column('text')
+    @Column({type: 'text', name: 'remark', nullable: true, comment: '备注'})
     remark: string;
 
     @Column('bigint')
