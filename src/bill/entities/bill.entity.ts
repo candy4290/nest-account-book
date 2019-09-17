@@ -1,16 +1,16 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
+import { User } from '../../user/entities/user.entity';
 @Entity({
     name: 'bill',
 })
 export class Bill {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @Column()
     userId: number;
 
-    @Column('text')
+    @Column({type: 'text', name: 'consumeDate', comment: '账单发生日期'})
     consumeDate: string;
 
     // tslint:disable-next-line:max-line-length
@@ -23,9 +23,9 @@ export class Bill {
     @Column({type: 'text', name: 'remark', nullable: true, comment: '备注'})
     remark: string;
 
-    @Column('bigint')
+    @Column({type: 'bigint', name: 'submitDate', comment: '提交时间'})
     submitDate: number;
 
-    @Column('bigint')
+    @Column({type: 'bigint', name: 'lastUpdateDate', comment: '最后更新时间'})
     lastUpdateDate: number;
 }
