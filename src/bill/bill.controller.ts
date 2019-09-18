@@ -83,4 +83,24 @@ export class BillController {
         });
     }
 
+    /**
+     * 查询当前月份每天的收入总额、支出总额
+     *
+     * @param {Request} request
+     * @param {Response} response
+     * @param {{month: string}} query
+     * @memberof BillController
+     */
+    @Post('statisticsDayOfMonth')
+    @UseGuards(new AuthGuard())
+    statisticsDayOfMonth(@Req() request: Request, @Res() response: Response, @Body() query: {month: string}) {
+        const token = request.headers[tokenConfig.TOKEN_NAME] + '';
+        const payload = TokenUtils.parseToken(token);
+        this.billService.statisticsDayOfMonth(payload.id, query.month).then(rsp => {
+            if (rsp) {
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
+            }
+        });
+    }
+
 }

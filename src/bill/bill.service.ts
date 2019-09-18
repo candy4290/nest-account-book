@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Bill } from './interfaces/bill.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -47,22 +47,22 @@ export class BillService implements IBillService {
     const queryBuilder = this.billRepository.createQueryBuilder();
     if (type) {
       return queryBuilder
-      .where(`userId = :id`, {id})
-      .andWhere('consumeType = :type', { type })
-      .andWhere(`consumeDate like :param`)
+      .where(`user_id = :id`, {id})
+      .andWhere('consume_type = :type', { type })
+      .andWhere(`consume_date like :param`)
       .setParameters({
         param: `${month.slice(0, 7)}%`,
       })
-      .orderBy('consumeDate')
+      .orderBy('consume_date')
       .getMany();
     } else {
       return queryBuilder
-      .where(`userId = :id`, {id})
-      .andWhere(`consumeDate like :param`)
+      .where(`user_id = :id`, {id})
+      .andWhere(`consume_date like :param`)
       .setParameters({
         param: `${month.slice(0, 7)}%`,
       })
-      .orderBy('consumeDate')
+      .orderBy('consume_date')
       .getMany();
     }
   }
@@ -70,10 +70,20 @@ export class BillService implements IBillService {
   async statisticsDataOfMonth(id: number, month: string): Promise<any[]> {
     month = month || DateUtils.getDate(0);
     return await this.billRepository
-    .query(`select consumeType, round(sum(money),2) as money from bill where userId = ${id}
-    and consumeDate like '${month.slice(0, 7)}%' group by consumeType`)
+    .query(`select consume_type, round(sum(money),2) as money from bill where user_id = ${id}
+    and consume_date like '${month.slice(0, 7)}%' group by consume_type`)
       .then(rsp => {
       return rsp;
     });
+  }
+
+  async statisticsDayOfMonth(id: number, month: string): Promise<any[]> {
+    month = month || DateUtils.getDate(0);
+    return await this.billRepository
+    .query(`select user_id, consume_date, sum(if(money > 0, money, 0)) as money_in, sum(if(money < 0, money, 0)) as money_out 
+      from bill WHERE user_id = ${id} AND consume_date like '${month.slice(0, 7)}%' GROUP BY consume_date order by consume_date`)
+    .then(rsp => {
+      return rsp;
+    })
   }
 }

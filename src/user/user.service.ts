@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { User } from './interfaces/user.interface';
 import { IUserService } from './interfaces/user-service.interface';
 import { Repository } from 'typeorm';
@@ -13,7 +13,12 @@ export class UserService implements IUserService {
   }
 
   async login(user: User): Promise<number> {
-    return await this.userRepository.query(`select * from user where username='${user.userName}' and psw='${user.userPsw}'`).then(rsp => {
+    return await this.userRepository.find({
+      where: {
+        user_name: user.userName,
+        user_psw: user.userPsw,
+      },
+    }).then(rsp => {
       if (rsp && rsp.length > 0) {
         return rsp[0].id;
       } else {

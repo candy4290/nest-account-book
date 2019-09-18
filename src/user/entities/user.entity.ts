@@ -1,17 +1,19 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({
+    name: 'user',
+})
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({name: 'id', comment: '用户id'})
     id: number;
 
-    @Column({type: 'text', name: 'username', comment: '用户名'})
-    username: string;
+    @Column({type: 'varchar', name: 'user_name', comment: '用户名'})
+    userName: string;
 
-    @Column({type: 'text', name: 'user_mobile', nullable: true, comment: '手机号'})
+    @Column({type: 'varchar', name: 'user_mobile', nullable: true, comment: '手机号'})
     userMobile: string;
 
-    @Column({type: 'text', name: 'psw', comment: '密码'})
+    @Column({type: 'varchar', name: 'psw', comment: '密码'})
     psw: string;
 
     @Column({type: 'int', name: 'family_id', nullable: true, comment: '家庭编号'})
