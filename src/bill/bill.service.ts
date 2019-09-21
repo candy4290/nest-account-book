@@ -67,6 +67,16 @@ export class BillService implements IBillService {
     }
   }
 
+  async billListOfDay(id: number, consumeDate: string, isIncome: boolean) {
+    const queryBuilder = this.billRepository.createQueryBuilder();
+    return queryBuilder
+    .where(`user_id = :id`, {id})
+    .andWhere('consume_date = :consumeDate', { consumeDate })
+    .andWhere(isIncome ? 'money > 0' : 'money < 0')
+    .orderBy('consume_date')
+    .getMany();
+  }
+
   async statisticsDataOfMonth(id: number, month: string): Promise<any[]> {
     month = month || DateUtils.getDate(0);
     return await this.billRepository
@@ -84,6 +94,6 @@ export class BillService implements IBillService {
       from bill WHERE user_id = ${id} AND consume_date like '${month.slice(0, 7)}%' GROUP BY consume_date order by consume_date`)
     .then(rsp => {
       return rsp;
-    })
+    });
   }
 }

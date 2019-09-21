@@ -62,6 +62,18 @@ export class BillController {
         });
     }
 
+    @Post('billListOfDay')
+    @UseGuards(new AuthGuard())
+    billListOfDay(@Req() request: Request, @Res() response: Response, @Body() query: {consumeDate: string, isIncome: boolean}) {
+        const token = request.headers[tokenConfig.TOKEN_NAME] + '';
+        const payload = TokenUtils.parseToken(token);
+        this.billService.billListOfDay(payload.id, query.consumeDate, query.isIncome).then(rsp => {
+            if (rsp) {
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp.reverse(), rtnMsg: 'success!'});
+            }
+        });
+    }
+
     /**
      * 查询当前月份消费/收入的统计数据
      *
