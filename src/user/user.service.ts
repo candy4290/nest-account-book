@@ -15,10 +15,11 @@ export class UserService implements IUserService {
   async login(user: User): Promise<number> {
     return await this.userRepository.find({
       where: {
-        user_name: user.userName,
-        user_psw: user.userPsw,
+        userName: user.userName,
+        psw: user.userPsw,
       },
     }).then(rsp => {
+      Logger.log(rsp);
       if (rsp && rsp.length > 0) {
         return rsp[0].id;
       } else {

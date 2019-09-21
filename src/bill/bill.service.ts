@@ -70,7 +70,7 @@ export class BillService implements IBillService {
   async statisticsDataOfMonth(id: number, month: string): Promise<any[]> {
     month = month || DateUtils.getDate(0);
     return await this.billRepository
-    .query(`select consume_type, round(sum(money),2) as money from bill where user_id = ${id}
+    .query(`select consume_type as consumeType, round(sum(money),2) as money from bill where user_id = ${id}
     and consume_date like '${month.slice(0, 7)}%' group by consume_type`)
       .then(rsp => {
       return rsp;
