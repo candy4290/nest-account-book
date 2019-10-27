@@ -1,4 +1,4 @@
-import { Controller, Post, Res, HttpStatus, Body, UseGuards, Logger } from '@nestjs/common';
+import { Controller, Post, Res, HttpStatus, Body, UseGuards, Logger, Get, Param, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserDto } from './dtos/user-login.dto';
@@ -33,6 +33,12 @@ export class UserController {
                 response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.USER_NOT_VALID, rtnMsg: '用户名或密码错误！'});
             }
         });
+    }
+
+    @Get('/testJsonP')
+    testJsonP(@Res() response: Response, @Query('callback') callback: any = 'callback') {
+        Logger.log('controll处理程序...');
+        response.status(HttpStatus.OK).send(`${callback}("JSONP成功返回")`);
     }
 
     @Post('/list')
