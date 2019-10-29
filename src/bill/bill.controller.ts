@@ -115,4 +115,16 @@ export class BillController {
         });
     }
 
+    @Post('billListByRemark')
+    @UseGuards(new AuthGuard())
+    billListByRemark(@Req() request: Request, @Res() response: Response, @Body() query: {remark: string}) {
+        const token = request.headers[tokenConfig.TOKEN_NAME] + '';
+        const payload = TokenUtils.parseToken(token);
+        this.billService.billListByRemark(payload.id, query.remark).then(rsp => {
+            if (rsp) {
+                response.status(HttpStatus.OK).json({rtnCode: ApiErrorCode.SUCCESS, rtnData: rsp, rtnMsg: 'success!'});
+            }
+        });
+    }
+
 }

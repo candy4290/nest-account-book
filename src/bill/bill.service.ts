@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Bill } from './interfaces/bill.interface';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Bill as BILL } from './entities/bill.entity';
 import { DateUtils } from 'src/common/utils/date';
@@ -94,6 +94,13 @@ export class BillService implements IBillService {
       from bill WHERE user_id = ${id} AND consume_date like '${month.slice(0, 7)}%' GROUP BY consume_date order by consume_date`)
     .then(rsp => {
       return rsp;
+    });
+  }
+
+  async billListByRemark(id: number, remark: string): Promise<any[]> {
+    return await this.billRepository.find({
+      userId: id,
+      remark: Like(`%${remark}%`),
     });
   }
 }
